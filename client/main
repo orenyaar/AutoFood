@@ -1,0 +1,75 @@
+#!/usr/bin/python
+
+from Tkinter import *
+
+class MainScreen():
+    statusLabel = None
+
+    def __init__(self):
+        root = Tk()
+        root.title("AutoFood")
+        root.resizable(width=False, height=False)
+        root.geometry('{}x{}'.format("300", "100"))
+        self.setTitle(root)
+        self.setOptions(root)
+        root.mainloop()
+        return
+
+    def setTitle(self, root):
+        title = StringVar()
+        label = Label(root, textvariable=title, relief=RAISED)
+        title.set("AutoFood")
+        label.pack()
+        return
+
+    def openRestaurantPickerScreen(self, root):
+        top = Toplevel()
+        checkVar1 = IntVar()
+        checkVar2 = IntVar()
+        checkVar3 = IntVar()
+
+        C1 = Checkbutton(top, text="BBB", variable=checkVar1, onvalue=1, offvalue=0, height=1, width=20)
+        C2 = Checkbutton(top, text="SOHO", variable=checkVar2, onvalue=1, offvalue=0, height=1, width=20)
+        C3 = Checkbutton(top, text="Prusot", variable=checkVar3, onvalue=1, offvalue=0, height=1, width=20)
+        C1.pack()
+        C2.pack()
+        C3.pack()
+
+        def on_closing():
+            name1 = "SOHO"
+            name2 = "Prusot"
+            self.updatenRestaurants(name1, name2)
+            top.destroy()
+            return
+
+        top.protocol("WM_DELETE_WINDOW", on_closing)
+        top.resizable(width=False, height=False)
+        top.geometry('{}x{}'.format("300", "100"))
+        top.mainloop()
+        return
+
+    def setOptions(self, root):
+        def sel():
+            selection = var.get()
+            if selection == 1:
+                self.statusLabel.config(text="Thank you!! You will never be hungry again :)")
+            if selection == 2:
+                self.statusLabel.config(text="")
+                self.openRestaurantPickerScreen(root)
+
+        var = IntVar()
+        R1 = Radiobutton(root, text="Last Food", variable=var, value=1, command=sel)
+        R1.pack(anchor=W)
+        R2 = Radiobutton(root, text="Choose Restaurants...", variable=var, value=2, command=sel)
+        R2.pack(anchor=W)
+
+        self.statusLabel = Label(root)
+        self.statusLabel.pack()
+        return
+
+    def updatenRestaurants(self, name1, name2):
+        self.statusLabel.config(text=name1 + " and " + name2 + " have been set")
+        return
+
+# Main code
+MainScreen()
