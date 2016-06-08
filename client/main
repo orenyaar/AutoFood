@@ -24,16 +24,32 @@ class MainScreen():
 
     def openRestaurantPickerScreen(self, root):
         top = Toplevel()
+
+        title = StringVar()
+        label = Label(top, textvariable=title, relief=RAISED)
+        title.set("Choose 2 restaurants")
+        label.pack()
+
         checkVar1 = IntVar()
         checkVar2 = IntVar()
         checkVar3 = IntVar()
+        checkVar4 = IntVar()
+        checkVar5 = IntVar()
+        checkVar6 = IntVar()
 
         C1 = Checkbutton(top, text="BBB", variable=checkVar1, onvalue=1, offvalue=0, height=1, width=20)
         C2 = Checkbutton(top, text="SOHO", variable=checkVar2, onvalue=1, offvalue=0, height=1, width=20)
-        C3 = Checkbutton(top, text="Prusot", variable=checkVar3, onvalue=1, offvalue=0, height=1, width=20)
+        C3 = Checkbutton(top, text="Pepper", variable=checkVar3, onvalue=1, offvalue=0, height=1, width=20)
+        C4 = Checkbutton(top, text="River", variable=checkVar4, onvalue=1, offvalue=0, height=1, width=20)
+        C5 = Checkbutton(top, text="Prusot", variable=checkVar5, onvalue=1, offvalue=0, height=1, width=20)
+        C6 = Checkbutton(top, text="Lehem Vered", variable=checkVar6, onvalue=1, offvalue=0, height=1, width=20)
+
         C1.pack()
         C2.pack()
         C3.pack()
+        C4.pack()
+        C5.pack()
+        C6.pack()
 
         def on_closing():
             name1 = "SOHO"
@@ -44,7 +60,7 @@ class MainScreen():
 
         top.protocol("WM_DELETE_WINDOW", on_closing)
         top.resizable(width=False, height=False)
-        top.geometry('{}x{}'.format("300", "100"))
+        top.geometry('{}x{}'.format("300", "170"))
         top.mainloop()
         return
 
