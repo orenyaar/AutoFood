@@ -2,6 +2,9 @@
 
 from Tkinter import *
 
+from backend.order import OrderFood
+
+
 class MainScreen():
     statusLabel = None
 
@@ -52,7 +55,7 @@ class MainScreen():
         C6.pack()
 
         def on_closing():
-            name1 = "SOHO"
+            name1 = "BBB"
             name2 = "Prusot"
             self.updatenRestaurants(name1, name2)
             top.destroy()
@@ -69,6 +72,9 @@ class MainScreen():
             selection = var.get()
             if selection == 1:
                 self.statusLabel.config(text="Thank you!! You will never be hungry again :)")
+                orderFood = OrderFood()
+                orderFood.order_food()
+
             if selection == 2:
                 self.statusLabel.config(text="")
                 self.openRestaurantPickerScreen(root)
@@ -85,6 +91,8 @@ class MainScreen():
 
     def updatenRestaurants(self, name1, name2):
         self.statusLabel.config(text=name1 + " and " + name2 + " have been set")
+        orderFood = OrderFood()
+        orderFood.order_food()
         return
 
 # Main code
