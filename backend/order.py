@@ -10,38 +10,57 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import NoAlertPresentException
 import webdriverwrapper
 import time
+import smtplib
 
+MSG_TEMPLATE = """
+To: To Person <{to}>
+MIME-Version: 1.0
+Content-type: text/html
+Subject: Your food was ordered by Auto-food.
+
+<b>{msg}</b>
+"""
 
 class OrderFood(object):
-    def __init__(self):
-        path_to_my_profile = "C:\\Users\\amirbl\\AppData\\Roaming\Mozilla\\Firefox\\Profiles\\7tr50x99.default"
-        profile = FirefoxProfile(path_to_my_profile)
-        self.driver = webdriverwrapper.Firefox(profile)
+    def set_up(self, browser):
+        if browser=='IE':
+            self.driver = webdriverwrapper.Ie()
+        else:
+            path_to_my_profile = "C:\\Users\\amirbl\\AppData\\Roaming\Mozilla\\Firefox\\Profiles\\7tr50x99.default"
+            profile = FirefoxProfile(path_to_my_profile)
+            self.driver = webdriverwrapper.Firefox(profile)
         self.driver.implicitly_wait(30)
         self.base_url = "http://wiki.checkpoint.com/"
         self.verificationErrors = []
         self.accept_next_alert = True
 
+
+    def send_email(self, to, message):
+        msg = MSG_TEMPLATE.format(to=to, msg=message)
+        print (msg)
+        fromaddr = 'auto_food@gmail.com'
+        toaddrs = 'amirb@lacoon.com'
+
+        # Credentials (if needed)
+        username = 'amirb@lacoon.com'
+        password = 'amirbl100'
+
+        # The actual mail send
+        server = smtplib.SMTP('smtp.gmail.com:587')
+        server.starttls()
+        server.login(username, password)
+        server.sendmail(fromaddr, to, msg)
+        server.quit()
+
     def goto_food_point(self):
+        self.set_up()
         self.driver.get(self.base_url + "/confluence/")
         self.driver.find_element_by_css_selector("#FoodPoint > div").click()
 
         self.driver.wait_for_element(xpath="//h2")
         print (self.driver.get_elm(xpath="//h2").text)
 
-    # def check_order_food(self, date):
-    #     # parsed_date = date.replace("/", "_").replace("/", "_")
-    #     #current_shift_obj = self.driver.get_elm(xpath='[id^= personalOrder_%s]' % parsed_date)
-    #
-    #     if u"הזמנת" in self.driver.get_elm(xpath="//h2").text:
-    #         print "OK"
-    #
-    #     else:
-    #         "not ok"
-    #
-    #     # self.driver.find_element_by_link_text(u"ההזמנות שלי").click()
-
-    def order_food(self, rest_id, date, round_id, really=True):
+    def order_food(self, rest_id, date, round_id, really=True, browser='FIREFOX'):
         try:
             self.goto_food_point()
             # self.check_order_food(date)
@@ -57,19 +76,13 @@ class OrderFood(object):
             if really:
                 time.sleep(5)
                 self.driver.execute_script("javascript:SubmitOrder()")
+                self.send_email(to='amirb@lacoon.com', message='Your food was ordered by Auto-food.')
             else:
                 self.driver.find_element_by_id("fancybox-close").click()
             time.sleep(5)
             print ("order succeeded")
         finally:
             self.tear_down()
-
-    def is_element_present(self, how, what):
-        try:
-            self.driver.find_element(by=how, value=what)
-        except NoSuchElementException as e:
-            return False
-        return True
 
     def tear_down(self):
         self.driver.quit()
