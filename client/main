@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 from Tkinter import *
+import tkFont
 
 from backend.order import OrderFood, RESTS
 
@@ -12,7 +13,7 @@ class MainScreen():
         root = Tk()
         root.title("AutoFood")
         root.resizable(width=False, height=False)
-        root.geometry('{}x{}'.format("300", "100"))
+        root.geometry('{}x{}'.format("400", "150"))
         self.setTitle(root)
         self.setOptions(root)
         root.mainloop()
@@ -21,6 +22,8 @@ class MainScreen():
     def setTitle(self, root):
         title = StringVar()
         label = Label(root, textvariable=title, relief=RAISED)
+        font = tkFont.Font(family="Helvetica", size=12, weight="bold")
+        label.configure(font=font)
         title.set("AutoFood")
         label.pack()
         return
@@ -31,6 +34,8 @@ class MainScreen():
         title = StringVar()
         label = Label(top, textvariable=title, relief=RAISED)
         title.set("Choose 2 restaurants")
+        font = tkFont.Font(family="Helvetica", size=12, weight="bold")
+        label.configure(font=font)
         label.pack()
 
         checkVar1 = IntVar()
@@ -46,6 +51,13 @@ class MainScreen():
         C4 = Checkbutton(top, text="Diana", variable=checkVar4, onvalue=1, offvalue=0, height=1, width=20)
         C5 = Checkbutton(top, text="Prusot", variable=checkVar5, onvalue=1, offvalue=0, height=1, width=20)
         C6 = Checkbutton(top, text="Lehem Vered", variable=checkVar6, onvalue=1, offvalue=0, height=1, width=20)
+
+        C1.configure(font=font)
+        C2.configure(font=font)
+        C3.configure(font=font)
+        C4.configure(font=font)
+        C5.configure(font=font)
+        C6.configure(font=font)
 
         C1.pack()
         C2.pack()
@@ -63,7 +75,7 @@ class MainScreen():
 
         top.protocol("WM_DELETE_WINDOW", on_closing)
         top.resizable(width=False, height=False)
-        top.geometry('{}x{}'.format("300", "170"))
+        top.geometry('{}x{}'.format("250", "220"))
         top.mainloop()
         return
 
@@ -71,26 +83,30 @@ class MainScreen():
         def sel():
             selection = var.get()
             if selection == 1:
-                self.statusLabel.config(text="Thank you!! You will never be hungry again :)")
-                OrderFood().order_food(rest_id=RESTS.get("Diana"), date='16/06/2016', round_id='1', really=True)
+                self.statusLabel.config(text="\nThank you!! You will never be hungry again :)")
+                # OrderFood().order_food(rest_id=RESTS.get("Diana"), date='16/06/2016', round_id='1', really=True)
 
             if selection == 2:
                 self.statusLabel.config(text="")
                 self.openRestaurantPickerScreen(root)
 
         var = IntVar()
+        font = tkFont.Font(family="Helvetica", size=12, weight="bold")
         R1 = Radiobutton(root, text="Last Food", variable=var, value=1, command=sel)
+        R1.configure(font=font)
         R1.pack(anchor=W)
         R2 = Radiobutton(root, text="Choose Restaurants...", variable=var, value=2, command=sel)
+        R2.configure(font=font)
         R2.pack(anchor=W)
 
         self.statusLabel = Label(root)
+        self.statusLabel.configure(font=font)
         self.statusLabel.pack()
         return
 
     def updatenRestaurants(self, name1, name2):
-        self.statusLabel.config(text=name1 + " and " + name2 + " have been set")
-        OrderFood().order_food(rest_id=RESTS.get(name1), date='15/06/2016', round_id='1', really=True)
+        self.statusLabel.config(text="\n" + name1 + " and " + name2 + " have been set")
+        # OrderFood().order_food(rest_id=RESTS.get(name1), date='15/06/2016', round_id='1', really=True)
         return
 
 # Main code
