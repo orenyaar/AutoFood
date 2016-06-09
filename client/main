@@ -72,7 +72,7 @@ class MainScreen():
             selection = var.get()
             if selection == 1:
                 self.statusLabel.config(text="Thank you!! You will never be hungry again :)")
-                OrderFood().order_food(rest_id='17988879', date='16/06/2016', round_id='1', really=True)
+                OrderFood().order_food(rest_id='4923', date='16/06/2016', round_id='1', really=True)
 
             if selection == 2:
                 self.statusLabel.config(text="")
