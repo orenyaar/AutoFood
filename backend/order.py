@@ -22,7 +22,7 @@ RESTS = {
     "BBB": "6969",
     "SOHO": "4801",
     "Salad Neto": "12096",
-    "Diana": "1015",
+    "WolfNights": "16550",
     "Prusot": "11832",
     "Lehem Vered": "3684"
 }
