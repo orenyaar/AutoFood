@@ -14,6 +14,8 @@ Subject: Your food was ordered by Auto-Food.
 
 <b>{msg}</b>
 <h2>{rest}</h2>
+<br/>
+<img src="http://i.imgur.com/UNdb1p0.gif"  >
 """
 
 RESTS = {
@@ -86,7 +88,7 @@ class OrderFood(object):
             if really:
                 time.sleep(5)
                 self.driver.execute_script("javascript:SubmitOrder()")
-                self.send_email(to='amirb@lacoon.com', message='Your food was ordered by Auto-food.', code=rest_id)
+                self.send_email(to='amirb@lacoon.com', message='Your food was ordered by Auto-Food.', code=rest_id)
             else:
                 self.driver.find_element_by_id("fancybox-close").click()
             time.sleep(5)
