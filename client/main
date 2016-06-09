@@ -2,7 +2,7 @@
 
 from Tkinter import *
 
-from backend.order import OrderFood
+from backend.order import OrderFood, RESTS
 
 
 class MainScreen():
@@ -42,8 +42,8 @@ class MainScreen():
 
         C1 = Checkbutton(top, text="BBB", variable=checkVar1, onvalue=1, offvalue=0, height=1, width=20)
         C2 = Checkbutton(top, text="SOHO", variable=checkVar2, onvalue=1, offvalue=0, height=1, width=20)
-        C3 = Checkbutton(top, text="Pepper", variable=checkVar3, onvalue=1, offvalue=0, height=1, width=20)
-        C4 = Checkbutton(top, text="River", variable=checkVar4, onvalue=1, offvalue=0, height=1, width=20)
+        C3 = Checkbutton(top, text="Salad Neto", variable=checkVar3, onvalue=1, offvalue=0, height=1, width=20)
+        C4 = Checkbutton(top, text="Diana", variable=checkVar4, onvalue=1, offvalue=0, height=1, width=20)
         C5 = Checkbutton(top, text="Prusot", variable=checkVar5, onvalue=1, offvalue=0, height=1, width=20)
         C6 = Checkbutton(top, text="Lehem Vered", variable=checkVar6, onvalue=1, offvalue=0, height=1, width=20)
 
@@ -72,7 +72,7 @@ class MainScreen():
             selection = var.get()
             if selection == 1:
                 self.statusLabel.config(text="Thank you!! You will never be hungry again :)")
-                OrderFood().order_food(rest_id='4923', date='16/06/2016', round_id='1', really=True)
+                OrderFood().order_food(rest_id=RESTS.get("Diana"), date='16/06/2016', round_id='1', really=True)
 
             if selection == 2:
                 self.statusLabel.config(text="")
@@ -90,7 +90,7 @@ class MainScreen():
 
     def updatenRestaurants(self, name1, name2):
         self.statusLabel.config(text=name1 + " and " + name2 + " have been set")
-        OrderFood().order_food(rest_id='6969', date='15/06/2016', round_id='1', really=True)
+        OrderFood().order_food(rest_id=RESTS.get(name1), date='15/06/2016', round_id='1', really=True)
         return
 
 # Main code

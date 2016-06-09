@@ -1,28 +1,39 @@
 # -*- coding: utf-8 -*-
+import smtplib
+import time
 from datetime import datetime
 
-from selenium import webdriver
-from selenium.webdriver import FirefoxProfile
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.ui import Select
-from selenium.common.exceptions import NoSuchElementException
-from selenium.common.exceptions import NoAlertPresentException
 import webdriverwrapper
-import time
-import smtplib
+from selenium.webdriver import FirefoxProfile
 
-MSG_TEMPLATE = """
+MSG_TEMPLATE = """From: Auto_Food <olegb@lacoon.com>
 To: To Person <{to}>
 MIME-Version: 1.0
 Content-type: text/html
-Subject: Your food was ordered by Auto-food.
+Subject: Your food was ordered by Auto-Food.
 
 <b>{msg}</b>
+<h2>{rest}</h2>
 """
 
+RESTS = {
+    "BBB": "6969",
+    "SOHO": "4801",
+    "Salad Neto": "12096",
+    "Diana": "1015",
+    "Prusot": "11832",
+    "Lehem Vered": "3684"
+}
+
+def get_rest_number_by_code(code):
+    for key, val in RESTS.iteritems():
+        if val == code:
+            return key
+
+    return "UNKNOWN REST"
+
 class OrderFood(object):
-    def set_up(self, browser):
+    def set_up(self, browser="FIREFOX"):
         if browser=='IE':
             self.driver = webdriverwrapper.Ie()
         else:
@@ -34,9 +45,8 @@ class OrderFood(object):
         self.verificationErrors = []
         self.accept_next_alert = True
 
-
-    def send_email(self, to, message):
-        msg = MSG_TEMPLATE.format(to=to, msg=message)
+    def send_email(self, to, message, code):
+        msg = MSG_TEMPLATE.format(to=to, msg=message, rest=get_rest_number_by_code(code))
         print (msg)
         fromaddr = 'auto_food@gmail.com'
         toaddrs = 'amirb@lacoon.com'
@@ -52,8 +62,8 @@ class OrderFood(object):
         server.sendmail(fromaddr, to, msg)
         server.quit()
 
-    def goto_food_point(self):
-        self.set_up()
+    def goto_food_point(self, browser):
+        self.set_up(browser)
         self.driver.get(self.base_url + "/confluence/")
         self.driver.find_element_by_css_selector("#FoodPoint > div").click()
 
@@ -62,7 +72,7 @@ class OrderFood(object):
 
     def order_food(self, rest_id, date, round_id, really=True, browser='FIREFOX'):
         try:
-            self.goto_food_point()
+            self.goto_food_point(browser)
             # self.check_order_food(date)
 
             print ("goToRes('{rest_id}', '{date}', '{round_id}', 'Full')".format(rest_id=rest_id, date=date,
@@ -76,7 +86,7 @@ class OrderFood(object):
             if really:
                 time.sleep(5)
                 self.driver.execute_script("javascript:SubmitOrder()")
-                self.send_email(to='amirb@lacoon.com', message='Your food was ordered by Auto-food.')
+                self.send_email(to='amirb@lacoon.com', message='Your food was ordered by Auto-food.', code=rest_id)
             else:
                 self.driver.find_element_by_id("fancybox-close").click()
             time.sleep(5)
@@ -86,7 +96,6 @@ class OrderFood(object):
 
     def tear_down(self):
         self.driver.quit()
-
 
 if __name__ == "__main__":
     today = "{:%d/%m/%y}".format(datetime.now())
