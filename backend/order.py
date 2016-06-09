@@ -9,6 +9,7 @@ from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import NoAlertPresentException
 import webdriverwrapper
+import time
 
 
 class OrderFood(object):
@@ -54,9 +55,11 @@ class OrderFood(object):
             self.driver.find_element_by_id("selectDishFromLastOrderLink").click()
 
             if really:
+                time.sleep(5)
                 self.driver.execute_script("javascript:SubmitOrder()")
             else:
                 self.driver.find_element_by_id("fancybox-close").click()
+            time.sleep(5)
             print ("order succeeded")
         finally:
             self.tear_down()
@@ -67,25 +70,6 @@ class OrderFood(object):
         except NoSuchElementException as e:
             return False
         return True
-
-    def is_alert_present(self):
-        try:
-            self.driver.switch_to_alert()
-        except NoAlertPresentException as e:
-            return False
-        return True
-
-    def close_alert_and_get_its_text(self):
-        try:
-            alert = self.driver.switch_to_alert()
-            alert_text = alert.text
-            if self.accept_next_alert:
-                alert.accept()
-            else:
-                alert.dismiss()
-            return alert_text
-        finally:
-            self.accept_next_alert = True
 
     def tear_down(self):
         self.driver.quit()
