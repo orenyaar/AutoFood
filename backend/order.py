@@ -54,8 +54,8 @@ class OrderFood(object):
         toaddrs = 'amirb@lacoon.com'
 
         # Credentials (if needed)
-        username = 'amirb@lacoon.com'
-        password = 'amirbl100'
+        username = 'autofood3@gmail.com'
+        password = 'auto1234'
 
         # The actual mail send
         server = smtplib.SMTP('smtp.gmail.com:587')
